@@ -1,0 +1,1 @@
+Names:Hamza Fethi 0963707Usman Siddiqui 0914456Furkan calik 0928212A Public Library System implemented in python using a designed UML class diagram. The user manual can be found in the user manual file in the same folder.
