@@ -55,7 +55,7 @@ class LoanAdministration():
         pass
 
     def initCustomers(self):
-        with open('customers.csv','r') as csv_file:
+        with open('./Code files/customers.csv','r') as csv_file:
             read = csv.reader(csv_file)
             for line in read:
                 self.customers.append(Customer(line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]))
@@ -156,7 +156,7 @@ class Catalog(Book):
         self.bookItems.append(BookItem(author,country,imageLink,language,link,pages,title,year))
     
     def initBooks(self):
-        with open('bookset.json','r') as json_file:
+        with open('./Code files/bookset.json','r') as json_file:
             read_books = json.load(json_file)
             for x in read_books:
                 self.books.append(Book(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
@@ -205,7 +205,7 @@ if __name__ == "__main__":
     #Re-searching the FairyTails book in the bookitems, Cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
-    #Check if customer has book
+    #Check if customer has book Fairy tails, Yes they have it!
     print(PublicLibrary.loanAdministration.customers[3].showBorrowedBooks()[0].bookTitle())
     
    
