@@ -93,11 +93,11 @@ class Customer(Person):
         return self.givenName
     
     def showBorrowedBooks(self):
-        for book in self.books:
-            print(book)
+        return self.books
     
     def addBook(self,book):
         self.books.append(book)
+
 
 
 class Author(Person):
@@ -173,7 +173,14 @@ class BookItem(Book):
 
 
 class LoanItem(Book):
-    pass
+    def __init__(self,author,country,imageLink,language,link,pages,title,year):
+        super().__init__(author,country,imageLink,language,link,pages,title,year)
+    
+    def getTitle(self):
+        return self.title
+    
+    def getAuthor(self):
+        return self.author[0].authorName()
         
 
 if __name__ == "__main__":
@@ -195,6 +202,10 @@ if __name__ == "__main__":
 
     #Re-searching the FairyTails book in the bookitems, Cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
+
+    #Check if customer has book
+    print(PublicLibrary.loanAdministration.customers[3].showBorrowedBooks()[0].bookTitle())
+    
    
 
     
