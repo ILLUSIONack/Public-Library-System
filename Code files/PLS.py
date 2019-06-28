@@ -37,8 +37,8 @@ class LoanAdministration():
         self.loanItemPerBook = {}
 
 
-    def addCustomer(self,customer):
-        self.customers.append(customer)
+    def addCustomer(self,gnd,ns,gn,surn,ad,zip,cty,email,user,tele):
+        self.customers.append(Customer(gnd,ns,gn,surn,ad,zip,cty,email,user,tele))
 
     def checkAvailabilityBook(self,book):
         pass
@@ -47,12 +47,11 @@ class LoanAdministration():
         pass
 
     def initCustomers(self):
-        with open('customers.csv','r') as csv_file:
+        with open('./Code files/customers.csv','r') as csv_file:
             read = csv.reader(csv_file)
             for line in read:
                 self.customers.append(Customer(line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]))
-            print('customers initialised')
-            print(self.customers[4].name())
+            print("Customers Added")
 
 
 class Person():
@@ -67,9 +66,6 @@ class Person():
         self.email = email
         self.userName = user
         self.telefoon = tele
-    
-    def name(self):
-        return self.givenName
 
 
 class Customer(Person):
@@ -84,6 +80,9 @@ class Customer(Person):
         self.id = Customer.gennumber()
         self.books = []
 
+    def getCustomerName(self):
+        return self.givenName
+        
     def borrowBook(self,book):
         pass
     
@@ -124,8 +123,8 @@ class Book():
     def addAuthor(self,author):
         self.author.append(Author(author))
     
-    def name(self):
-        return self.author
+    def bookTitle(self):
+        return self.title
 
 
 class Catalog(Book):
@@ -135,32 +134,49 @@ class Catalog(Book):
         self.index = {}
         self.availableBookItems = {}
 
-    def searchBook(self,book):
-        pass
+    def searchBook(self,input):
+        for bookitem in self.bookItems:
+            if input == bookitem.getTitle():
+                print( "Book called '" +bookitem.getTitle() + "' found!")
+            elif input == bookitem.getAuthor():
+                print("Book: "+ bookitem.getTitle() +", Author: " +bookitem.getAuthor())
 
-    def addBookItem(self,bookitem):
-        pass
+
+    def addBookItem(self,author,country,imageLink,language,link,pages,title,year):
+        self.bookItems.append(BookItem(author,country,imageLink,language,link,pages,title,year))
     
     def initBooks(self):
-        with open('bookset.json','r') as json_file:
+        with open('./Code files/bookset.json','r') as json_file:
             read_books = json.load(json_file)
             for x in read_books:
                 self.books.append(Book(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
-            print('books initialised')
-            print(self.books[0].name()[0].authorName())
-            
-                
+                self.bookItems.append(BookItem(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
+            print('Books and BookItems added.')
+           
 
 class BookItem(Book):
-    def __init__(self,title):
+    def __init__(self,author,country,imageLink,language,link,pages,title,year):
         super().__init__(author,country,imageLink,language,link,pages,title,year)
+    
+    def getTitle(self):
+        return self.title
+    
+    def getAuthor(self):
+        return self.author[0].authorName()
 
 
-class LoanItem():
+class LoanItem(Book):
     pass
         
 
 if __name__ == "__main__":
     PublicLibrary = PublicLibrary()
+    #Search for a book called 'Things Fall Apart'
+    PublicLibrary.catalog.searchBook("Things Fall Apart")
+    #Search for a books with the author name 'Chinua Achebe'
+    PublicLibrary.catalog.searchBook("Chinua Achebe")
+    #Customer Name test
+    print(PublicLibrary.loanAdministration.customers[0].getCustomerName())
+    
 
 
