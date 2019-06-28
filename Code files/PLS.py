@@ -43,7 +43,10 @@ class LoanAdministration():
     def checkAvailabilityBook(self,book):
         pass
 
-    def borrowBook(self,book):
+    def borrowBook(self,customer,book):
+        pass
+
+    def returnBook(self,customer,book):
         pass
 
     def initCustomers(self):
@@ -83,11 +86,6 @@ class Customer(Person):
     def getCustomerName(self):
         return self.givenName
         
-    def borrowBook(self,book):
-        pass
-    
-    def returnBook(self,book):
-        pass
     
     def showBorrowedBooks(self):
         pass
