@@ -59,7 +59,8 @@ class LoanAdministration():
             read = csv.reader(csv_file)
             for line in read:
                 self.customers.append(Customer(line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]))
-            print("Customers Added")
+        print("Customers loaded...")
+        print("Welcome to the Public Library System!")
 
 
 class Person():
@@ -140,11 +141,11 @@ class Catalog(Book):
         self.index = {}
         self.availableBookItems = {}
 
-    def searchBook(self,input):
+    def searchBook(self,book):
         for bookitem in self.bookItems:
-            if input == bookitem.getTitle():
+            if book == bookitem.getTitle():
                 print( "Book called '" +bookitem.getTitle() + "' found!")
-            elif input == bookitem.getAuthor():
+            elif book == bookitem.getAuthor():
                 print("Book: "+ bookitem.getTitle() +", Author: " +bookitem.getAuthor())
 
 
@@ -157,7 +158,7 @@ class Catalog(Book):
             for x in read_books:
                 self.books.append(Book(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
                 self.bookItems.append(BookItem(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
-            print('Books and BookItems added.')
+            print("Books loaded...")
            
 
 class BookItem(Book):
@@ -189,12 +190,13 @@ if __name__ == "__main__":
     #Search for a books with the author name 'Chinua Achebe'
     PublicLibrary.catalog.searchBook("Chinua Achebe")
 
-    #Re-searching the FairyTails book in the bookitems, Cannot be found!
-    PublicLibrary.catalog.searchBook("Fairy Tales")
-   
-
     #Borrow book test, lend Customer 1 the book called fairy tales
     PublicLibrary.borrowBook(Customer1,Book1)
+
+    #Re-searching the FairyTails book in the bookitems, Cannot be found!
+    PublicLibrary.catalog.searchBook("Fairy tales")
+   
+
     
 
 
