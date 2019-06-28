@@ -20,7 +20,7 @@ class PublicLibrary():
     def returnBook(self,customer,book):
         pass
 
-    def makeBackup(self):
+    def makeBackup(self, namefile):
         with open("./data/data.json", "r") as fromFile, open("./backup/" + namefile + ".json", "w") as to:
             to.write(fromFile.read())
             fromFile.close()
@@ -55,7 +55,7 @@ class LoanAdministration():
         pass
 
     def initCustomers(self):
-        with open('./Code files/customers.csv','r') as csv_file:
+        with open('customers.csv','r') as csv_file:
             read = csv.reader(csv_file)
             for line in read:
                 self.customers.append(Customer(line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]))
@@ -133,7 +133,6 @@ class Book():
     def bookTitle(self):
         return self.title
 
-
 class Catalog(Book):
     def __init__(self):
         self.books = []
@@ -141,19 +140,23 @@ class Catalog(Book):
         self.index = {}
         self.availableBookItems = {}
 
-    def searchBook(self,book):
-        for bookitem in self.bookItems:
-            if book == bookitem.getTitle():
-                print( "Book called '" +bookitem.getTitle() + "' found!")
-            elif book == bookitem.getAuthor():
-                print("Book: "+ bookitem.getTitle() +", Author: " +bookitem.getAuthor())
-
+    def searchBook(self, title):
+        books_found = []
+        print("Results for book (" + title + ")...")
+        for book in self.bookItems:
+            if book.isSearchedBook(title):
+                books_found.append(book)
+        if len(books_found) < 1:
+            print("No Books Found!")
+        else:
+            for b in books_found:
+                print("- " + b.title)
 
     def addBookItem(self,author,country,imageLink,language,link,pages,title,year):
         self.bookItems.append(BookItem(author,country,imageLink,language,link,pages,title,year))
     
     def initBooks(self):
-        with open('./Code files/bookset.json','r') as json_file:
+        with open('bookset.json','r') as json_file:
             read_books = json.load(json_file)
             for x in read_books:
                 self.books.append(Book(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
@@ -170,6 +173,9 @@ class BookItem(Book):
     
     def getAuthor(self):
         return self.author[0].authorName()
+
+    def isSearchedBook(self, titleLookup):
+        return True if self.title.lower().startswith(titleLookup.lower()) else False
 
 
 class LoanItem(Book):
@@ -193,12 +199,8 @@ if __name__ == "__main__":
     #Search for a book called 'Things Fall Apart'
     PublicLibrary.catalog.searchBook("Things Fall Apart")
 
-
-    #Search for a books with the author name 'Chinua Achebe'
-    PublicLibrary.catalog.searchBook("Chinua Achebe")
-
     #Borrow book test, lend Customer 1 the book called fairy tales
-    PublicLibrary.borrowBook(Customer1,Book1)
+    PublicLibrary.borrowBook(Customer1, Book1)
 
     #Re-searching the FairyTails book in the bookitems, Cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
