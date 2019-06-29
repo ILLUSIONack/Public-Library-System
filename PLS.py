@@ -9,17 +9,6 @@ class PublicLibrary():
         self.catalog.initBooks()
         self.loanAdministration.initCustomers()
 
-    def borrowBook(self,customer,book):
-        self.loanAdministration.loanItem.append(book)
-        self.catalog.bookItems.remove(book)
-        customer1 = self.loanAdministration.customers.index(customer)
-        self.loanAdministration.customers[customer1].addBook(book)
-        print("Customer "+self.loanAdministration.customers[customer1].getCustomerName()+" borrowed "+ self.loanAdministration.loanItem[0].bookTitle())
-
-
-    def returnBook(self,customer,book):
-        pass
-
     def makeBackup(self, namefile):
         with open("./data/data.json", "r") as fromFile, open("./backup/" + namefile + ".json", "w") as to:
             to.write(fromFile.read())
@@ -47,11 +36,21 @@ class LoanAdministration():
         self.customers = []
         self.loanItemPerBook = {}
 
-
     def addCustomer(self,gnd,ns,gn,surn,ad,zip,cty,email,user,tele):
         self.customers.append(Customer(gnd,ns,gn,surn,ad,zip,cty,email,user,tele))
 
     def checkAvailabilityBook(self,book):
+        pass
+
+    def borrowBook(self, catalog, customer, book):
+        self.loanItem.append(book)
+        catalog.bookItems.remove(book)
+        lender = self.customers.index(customer)
+        self.customers[lender].addBook(book)
+        print("Customer " + self.customers[lender].getCustomerName() + " borrowed " +
+              self.loanItem[0].bookTitle())
+
+    def returnBook(self, customer, book):
         pass
 
     def initCustomers(self):
@@ -193,20 +192,20 @@ if __name__ == "__main__":
     PublicLibrary = PublicLibrary()
 
     #Customer Valentin from customers.csv and Book 'Fairy Tales' from bookset.json
-    Customer1 = PublicLibrary.loanAdministration.customers[3]
-    Book1 = PublicLibrary.catalog.bookItems[1]
+    customer = PublicLibrary.loanAdministration.customers[3]
+    book = PublicLibrary.catalog.bookItems[1]
 
     #Search for a book called 'Things Fall Apart'
     PublicLibrary.catalog.searchBook("Things Fall Apart")
 
     #Borrow book test, lend Customer 1 the book called fairy tales
-    PublicLibrary.borrowBook(Customer1, Book1)
+    PublicLibrary.loanAdministration.borrowBook(PublicLibrary.catalog, customer, book)
 
     #Re-searching the FairyTails book in the bookitems, Cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
     #Check if customer has book Fairy tails, Yes they have it!
-    print(PublicLibrary.loanAdministration.customers[3].showBorrowedBooks()[0].bookTitle())
+    print("Customer book's: " + customer.showBorrowedBooks()[0].bookTitle())
     
    
 
