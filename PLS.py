@@ -217,6 +217,9 @@ if __name__ == "__main__":
     #Re-searching the FairyTails book in the bookitems, book cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
+    #Checking for book availability, 'Fairy tales'
+    PublicLibrary.loanAdministration.checkAvailabilityBook(PublicLibrary.catalog,book)
+
     #Check if customer has book Fairy tails, Yes they have it!
     print("Customer book's: " + customer.showBorrowedBooks()[0].bookTitle())
 
