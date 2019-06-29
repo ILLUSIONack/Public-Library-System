@@ -39,8 +39,11 @@ class LoanAdministration():
     def addCustomer(self,gnd,ns,gn,surn,ad,zip,cty,email,user,tele):
         self.customers.append(Customer(gnd,ns,gn,surn,ad,zip,cty,email,user,tele))
 
-    def checkAvailabilityBook(self,book):
-        pass
+    def checkAvailabilityBook(self,catalog,book):
+        if book in catalog.bookItems:
+            print(catalog.bookItems[catalog.bookItems.index(book)].getTitle()+", is available!")
+        else:
+            print("The book is not available.")
 
     def borrowBook(self, catalog, customer, book):
         self.loanItem.append(book)
@@ -203,6 +206,7 @@ if __name__ == "__main__":
     #Customer Valentin from customers.csv and Book 'Fairy Tales' from bookset.json
     customer = PublicLibrary.loanAdministration.customers[3]
     book = PublicLibrary.catalog.bookItems[1]
+    theDevineComedyBook = PublicLibrary.catalog.bookItems[2]
 
     #Search for a book called 'Things Fall Apart'
     PublicLibrary.catalog.searchBook("Things Fall Apart")
@@ -222,6 +226,7 @@ if __name__ == "__main__":
    #Re-searching the FairyTails book in the bookitems, book found again!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
-    
+    #Checking for book availability, 'The Devine Comedy'
+    PublicLibrary.loanAdministration.checkAvailabilityBook(PublicLibrary.catalog,theDevineComedyBook)
 
 
