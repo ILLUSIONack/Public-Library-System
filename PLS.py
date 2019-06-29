@@ -48,10 +48,16 @@ class LoanAdministration():
         lender = self.customers.index(customer)
         self.customers[lender].addBook(book)
         print("Customer " + self.customers[lender].getCustomerName() + " borrowed " +
-              self.loanItem[0].bookTitle())
+              self.loanItem[self.loanItem.index(book)].bookTitle())
 
-    def returnBook(self, customer, book):
-        pass
+    def returnBook(self, catalog, customer, book):
+        self.loanItem.remove(book)
+        catalog.bookItems.append(book)
+        lender = self.customers.index(customer)
+        self.customers[lender].removeBook(book)
+        print("Customer " + self.customers[lender].getCustomerName() + " returned " +
+               catalog.bookItems[catalog.bookItems.index(book)].bookTitle())
+
 
     def initCustomers(self):
         with open('./Code files/customers.csv','r') as csv_file:
@@ -96,6 +102,9 @@ class Customer(Person):
     
     def addBook(self,book):
         self.books.append(book)
+    
+    def removeBook(self,book):
+        self.books.remove(book)
 
 
 
@@ -201,13 +210,17 @@ if __name__ == "__main__":
     #Borrow book test, lend Customer 1 the book called fairy tales
     PublicLibrary.loanAdministration.borrowBook(PublicLibrary.catalog, customer, book)
 
-    #Re-searching the FairyTails book in the bookitems, Cannot be found!
+    #Re-searching the FairyTails book in the bookitems, book cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
     #Check if customer has book Fairy tails, Yes they have it!
     print("Customer book's: " + customer.showBorrowedBooks()[0].bookTitle())
+
+    #Customer Valentin returning the book Fairy Tales
+    PublicLibrary.loanAdministration.returnBook(PublicLibrary.catalog, customer, book)
     
-   
+   #Re-searching the FairyTails book in the bookitems, book found again!
+    PublicLibrary.catalog.searchBook("Fairy tales")
 
     
 
