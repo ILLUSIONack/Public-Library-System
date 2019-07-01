@@ -161,23 +161,13 @@ class Catalog(Book):
                 books_found.append(book)
             elif book.isSearchedISBN(input):
                 books_found.append(book)
-            else:
-                listed_authors = self.isSearchedAuthor(input)
-                for b in listed_authors:
-                    books_found.append(b)
+            elif book.isSearchedAuthor(input):
+                books_found.append(book)
         if len(books_found) < 1:
             print("No Books Found!")
         else:
             for b in books_found:
                 print("- " + b.title)
-
-    def isSearchedAuthor(self, input):
-        books_by_author = []
-        for bookitem in self.bookItems:
-            for author in bookitem.author:
-                if author.getFullName().lower().startswith(input.lower()):
-                    books_by_author.append(bookitem)
-        return books_by_author
 
     def addBookItem(self, author, country, imageLink, language, link, pages, title, year):
         self.bookItems.append(
@@ -190,6 +180,9 @@ class Catalog(Book):
                 self.books.append(
                     Book(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'], x['title'],
                          x['year']))
+                self.bookItems.append(
+                    BookItem(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'],
+                             x['title'], x['year'], BookItem.gennumber()))
                 self.bookItems.append(
                     BookItem(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'],
                              x['title'], x['year'], BookItem.gennumber()))
@@ -219,6 +212,13 @@ class BookItem(Book):
 
     def isSearchedISBN(self, isbn):
         return True if str(self.ISBN) == str(isbn) else False
+
+    def isSearchedAuthor(self, input):
+        for a in self.author:
+            author_name = a.getFullName()
+            if author_name.lower().startswith(input.lower()):
+                return True
+        return False
 
     def getISBN(self):
         return self.ISBN
@@ -275,6 +275,13 @@ if __name__ == "__main__":
 
     # Searching book by ISBN
     PublicLibrary.catalog.searchBook("3")
+
+    # Searching book by author
+    PublicLibrary.catalog.searchBook("Dante Alighieri")
+
+    book_new = PublicLibrary.catalog.bookItems[3]
+    # Borrow book test, lend Customer 1 the book called fairy tales
+    PublicLibrary.loanAdministration.borrowBook(PublicLibrary.catalog, customer, book_new)
 
     # Searching book by author
     PublicLibrary.catalog.searchBook("Dante Alighieri")
