@@ -155,7 +155,7 @@ class Catalog(Book):
 
     def searchBook(self, input):
         books_found = []
-        print("Results for book (" + input + ")...")
+        print("Results for (" + input + ")...")
         for book in self.bookItems:
             if book.isSearchedBook(input):
                 books_found.append(book)
@@ -167,7 +167,7 @@ class Catalog(Book):
             print("No Books Found!")
         else:
             for b in books_found:
-                print("- " + b.title)
+                print("- " + b.title + " (" + str(b.ISBN) + ")")
 
     def addBookItem(self, author, country, imageLink, language, link, pages, title, year):
         self.bookItems.append(
@@ -241,13 +241,15 @@ if __name__ == "__main__":
     # Customer Valentin from customers.csv and Book 'Fairy Tales' from bookset.json
     customer = PublicLibrary.loanAdministration.customers[3]
     book = PublicLibrary.catalog.bookItems[1]
-    theDevineComedyBook = PublicLibrary.catalog.bookItems[2]
+    theDevineComedyBook = PublicLibrary.catalog.bookItems[3]
 
     # Search for a book called 'Things Fall Apart'
     PublicLibrary.catalog.searchBook("Things Fall Apart")
 
     # Borrow book test, lend Customer 1 the book called fairy tales
     PublicLibrary.loanAdministration.borrowBook(PublicLibrary.catalog, customer, book)
+
+    PublicLibrary.catalog.searchBook("Things Fall Apart")
 
     # Re-searching the FairyTails book in the bookitems, book cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
