@@ -122,11 +122,8 @@ class Author(Person):
     def __init__(self, gn, gnd='', ns='', surn='', ad='', zip='', cty='', email='', user='', tele=''):
         super().__init__(gnd, ns, gn, surn, ad, zip, cty, email, user, tele)
 
-    def getFirstName(self):
-        return self.givenName
-
-    def getSurName(self):
-        return self.surName
+    def getFullName(self):
+        return self.givenName + " " + self.surName
 
 
 class Book():
@@ -162,13 +159,25 @@ class Catalog(Book):
         for book in self.bookItems:
             if book.isSearchedBook(input):
                 books_found.append(book)
-            elif book.isSearchedAuthor(input):
+            elif book.isSearchedISBN(input):
                 books_found.append(book)
+            else:
+                listed_authors = self.isSearchedAuthor(input)
+                for b in listed_authors:
+                    books_found.append(b)
         if len(books_found) < 1:
             print("No Books Found!")
         else:
             for b in books_found:
                 print("- " + b.title)
+
+    def isSearchedAuthor(self, input):
+        books_by_author = []
+        for bookitem in self.bookItems:
+            for author in bookitem.author:
+                if author.getFullName().lower().startswith(input.lower()):
+                    books_by_author.append(bookitem)
+        return books_by_author
 
     def addBookItem(self, author, country, imageLink, language, link, pages, title, year):
         self.bookItems.append(
@@ -208,17 +217,8 @@ class BookItem(Book):
     def isSearchedBook(self, titleLookup):
         return True if self.title.lower().startswith(titleLookup.lower()) else False
 
-    def isSearchedAuthor(self, author):
-        split = author.split(" ")
-        for a in self.author:
-            if a.getFirstName() == split[0] and a.getSurName() == split[1]:
-                print("Its valid")
-                return True
-        return False
-
     def isSearchedISBN(self, isbn):
-        print(self.ISBN, isbn)
-        return True if self.ISBN == isbn else False
+        return True if str(self.ISBN) == str(isbn) else False
 
     def getISBN(self):
         return self.ISBN
@@ -277,4 +277,4 @@ if __name__ == "__main__":
     PublicLibrary.catalog.searchBook("3")
 
     # Searching book by author
-    PublicLibrary.catalog.searchBook("Chinua Achebe")
+    PublicLibrary.catalog.searchBook("Dante Alighieri")
