@@ -36,8 +36,14 @@ class LoanAdministration():
         self.customers = []
         self.loanItemPerBook = {}
 
-    def addCustomer(self,gnd,ns,gn,surn,ad,zip,cty,email,user,tele):
-        self.customers.append(Customer(gnd,ns,gn,surn,ad,zip,cty,email,user,tele))
+    def addCustomer(self, customer):
+        self.customers.append(customer)
+        with open('./Code files/customers.csv', mode='a', newline='') as employee_file:
+            employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            employee_writer.writerow([customer.id, customer.gender, customer.nameSet, customer.givenName,
+                                      customer.surName, customer.adress, customer.zipCode, customer.city,
+                                      customer.email, customer.userName, customer.phoneNumber])
+            employee_file.close()
 
     def checkAvailabilityBook(self,catalog,book):
         if book in catalog.bookItems:
