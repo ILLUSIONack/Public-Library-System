@@ -120,14 +120,8 @@ class Author(Person):
 
 
 class Book():
-    bookid = 12345
-    @staticmethod
-    def gennumber():
-            Book.bookid +=1
-            return Book.bookid
         
     def __init__(self, author,country,imageLink,language,link,pages,title,year):
-            self.bookid = Book.gennumber()
             self.author = []
             self.addAuthor(author)
             self.country = country
@@ -171,14 +165,21 @@ class Catalog(Book):
             read_books = json.load(json_file)
             for x in read_books:
                 self.books.append(Book(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
-                self.bookItems.append(BookItem(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year']))
+                self.bookItems.append(BookItem(x['author'],x['country'],x['imageLink'],x['language'],x['link'],x['pages'],x['title'],x['year'],BookItem.gennumber()))
             print("Books loaded...")
            
 
 class BookItem(Book):
-    def __init__(self,author,country,imageLink,language,link,pages,title,year):
+    bookid = 0
+    @staticmethod
+    def gennumber():
+        BookItem.bookid +=1
+        return BookItem.bookid
+
+    def __init__(self,author,country,imageLink,language,link,pages,title,year,ISBN):
         super().__init__(author,country,imageLink,language,link,pages,title,year)
-    
+        self.ISBN = ISBN
+
     def getTitle(self):
         return self.title
     
@@ -187,6 +188,9 @@ class BookItem(Book):
 
     def isSearchedBook(self, titleLookup):
         return True if self.title.lower().startswith(titleLookup.lower()) else False
+    
+    def getISBN(self):
+        return self.ISBN
 
 
 class LoanItem(Book):
@@ -232,4 +236,5 @@ if __name__ == "__main__":
     #Checking for book availability, 'The Devine Comedy'
     PublicLibrary.loanAdministration.checkAvailabilityBook(PublicLibrary.catalog,theDevineComedyBook)
 
-
+    #Checking if BootItem has ISBN number
+    print(PublicLibrary.catalog.bookItems[0].getISBN())
