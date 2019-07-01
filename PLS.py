@@ -158,7 +158,7 @@ class Catalog(Book):
                 print("- " + b.title)
 
     def addBookItem(self,author,country,imageLink,language,link,pages,title,year):
-        self.bookItems.append(BookItem(author,country,imageLink,language,link,pages,title,year))
+        self.bookItems.append(BookItem(author,country,imageLink,language,link,pages,title,year,BookItem.gennumber()))
     
     def initBooks(self):
         with open('./Code files/bookset.json','r') as json_file:
