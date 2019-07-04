@@ -14,9 +14,11 @@ class PublicLibrary():
         data = {}
         with open('./Code files/customers.csv', 'r+', encoding='utf-8-sig') as csvdata:
             reader = csv.DictReader(csvdata, fieldnames=["Number","Gender","NameSet","GivenName","Surname","StreetAddress","ZipCode","City","EmailAddress","Username","TelephoneNumber"])
-#        data['customers'] = [row for row in reader]
- #       data['bookitems'] = self.catalog.bookItems
-        json.dump(data, open(namefile + '.json', 'w+', encoding='utf-8-sig'), ensure_ascii=False)
+            #        data['customers'] = [row for row in reader]
+            #       data['bookitems'] = self.catalog.bookItems
+            csvformattedintojson = [row for row in reader]
+            data['Customers'] = [csvformattedintojson]
+            json.dump(data, open(namefile + '.json', 'w+', encoding='utf-8-sig'), ensure_ascii=False)
         print("Successfully backed up the library!")
 
     def restoreBackup(self, name):
