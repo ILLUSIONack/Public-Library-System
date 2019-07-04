@@ -11,24 +11,21 @@ class PublicLibrary():
         self.loanAdministration.initCustomers()
 
     def makeBackup(self, namefile):
-        with open("./data/data.json", "r") as fromFile, open("./backup/" + namefile + ".json", "w") as to:
-            to.write(fromFile.read())
-            fromFile.close()
-            to.close()
-            print("Successfully backed up the library!")
+        data = {}
+        with open('./Code files/customers.csv', 'r+', encoding='utf-8-sig') as csvdata:
+            reader = csv.DictReader(csvdata, fieldnames=["Number","Gender","NameSet","GivenName","Surname","StreetAddress","ZipCode","City","EmailAddress","Username","TelephoneNumber"])
+#        data['customers'] = [row for row in reader]
+ #       data['bookitems'] = self.catalog.bookItems
+        json.dump(data, open(namefile + '.json', 'w+', encoding='utf-8-sig'), ensure_ascii=False)
+        print("Successfully backed up the library!")
 
     def restoreBackup(self, name):
-        files = os.listdir("./backup/")
+        files = os.listdir("./")
         for file in files:
             file = file.strip(".json")
             if file == name:
-                os.remove("./data/data.json")
-                with open("./backup/" + name + ".json", "r") as fromFile, open("./data/data.json", "w") as to:
-                    to.write(fromFile.read())
-                    fromFile.close()
-                    to.close()
-                    return "Successfully restored the backup file " + name
-        return "Failed to restore the backup file " + name
+                with open(name + ".json", "r", encoding='utf-8-sig') as fromFile:
+                    print(fromFile.read())
 
 
 class LoanAdministration():
@@ -100,10 +97,10 @@ class Customer(Person):
         Customer.personid += 1
         return Customer.personid
 
-    def __init__(self, gnd, ns, gn, surn, ad, zip, cty, email, user, tele):
+    def __init__(self, gnd, ns, gn, surn, ad, zip, cty, email, user, tele, books=[]):
         super().__init__(gnd, ns, gn, surn, ad, zip, cty, email, user, tele)
         self.id = Customer.gennumber()
-        self.books = []
+        self.books = books
 
     def getCustomerName(self):
         return self.givenName
@@ -287,3 +284,7 @@ if __name__ == "__main__":
 
     # Searching book by author
     PublicLibrary.catalog.searchBook("Dante Alighieri")
+
+    PublicLibrary.makeBackup("zerbi")
+
+    #PublicLibrary.restoreBackup("zerbi")
