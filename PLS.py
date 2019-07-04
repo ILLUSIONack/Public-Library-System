@@ -45,12 +45,6 @@ class LoanAdministration():
                                       customer.email, customer.userName, customer.phoneNumber])
             employee_file.close()
 
-    def checkAvailabilityBook(self, catalog, book):
-        if book in catalog.bookItems:
-            print(catalog.bookItems[catalog.bookItems.index(book)].getTitle() + ", is available!")
-        else:
-            print("The book is not available.")
-
     def borrowBook(self, catalog, customer, book):
         self.loanItem.append(book)
         catalog.bookItems.remove(book)
@@ -168,9 +162,11 @@ class Catalog(Book):
             for b in books_found:
                 print("- " + b.title + " (" + str(b.ISBN) + ")")
 
-    def addBookItem(self, author, country, imageLink, language, link, pages, title, year):
-        self.bookItems.append(
-            BookItem(author, country, imageLink, language, link, pages, title, year, BookItem.gennumber()))
+    def addBook(self, author, country, imageLink, language, link, pages, title, year):
+        self.books.append(
+            Book(author, country, imageLink, language, link, pages, title, year))
+        
+        # TO DO Create the book in the book json filt
 
     def initBooks(self):
         with open('./Code files/bookset.json', 'r') as json_file:
@@ -179,11 +175,8 @@ class Catalog(Book):
                 self.books.append(
                     Book(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'], x['title'],
                          x['year']))
-                self.bookItems.append(
-                    BookItem(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'],
-                             x['title'], x['year'], BookItem.gennumber()))
-                self.bookItems.append(
-                    BookItem(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'],
+                for i in range(2):
+                    self.bookItems.append(BookItem(x['author'], x['country'], x['imageLink'], x['language'], x['link'], x['pages'],
                              x['title'], x['year'], BookItem.gennumber()))
             print("Books loaded...")
 
@@ -253,20 +246,12 @@ if __name__ == "__main__":
     # Re-searching the FairyTails book in the bookitems, book cannot be found!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
-    # Checking for book availability, 'Fairy tales'
-    PublicLibrary.loanAdministration.checkAvailabilityBook(PublicLibrary.catalog, book)
-
     # Check if customer has book Fairy tails, Yes they have it!
     print("Customer book's: " + customer.showBorrowedBooks()[0].bookTitle())
-
-    # Customer Valentin returning the book Fairy Tales
-    PublicLibrary.loanAdministration.returnBook(PublicLibrary.catalog, customer, book)
 
     # Re-searching the FairyTails book in the bookitems, book found again!
     PublicLibrary.catalog.searchBook("Fairy tales")
 
-    # Checking for book availability, 'The Devine Comedy'
-    PublicLibrary.loanAdministration.checkAvailabilityBook(PublicLibrary.catalog, theDevineComedyBook)
 
     # Checking if BootItem has ISBN number
     print(PublicLibrary.catalog.bookItems[0].getISBN())
