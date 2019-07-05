@@ -52,7 +52,7 @@ class LoanAdministration():
     Loads the customers from the customers.csv file into the customer array in the loanadministration
     """
     def initCustomers(self):
-        with open('customers.csv', 'r') as csv_file:
+        with open('./Code files/customers.csv', 'r') as csv_file:
             read = csv.reader(csv_file)
             for line in read:
                 self.customers.append(
@@ -203,7 +203,7 @@ class Catalog(Book):
     """
     def addBook(self, author, country, imageLink, language, link, pages, title, year):
         self.books.append(Book(author, country, imageLink, language, link, pages, title, year))
-        with open("bookset.json", 'r+') as inputfile:
+        with open("./Code files/bookset.json", 'r+') as inputfile:
             data = json.load(inputfile)
             data.append({
                 "author": author,
@@ -231,7 +231,7 @@ class Catalog(Book):
     Loads the books from the bookset.json file into the books and bookitems array
     """
     def initBooks(self):
-        with open('bookset.json', 'r') as json_file:
+        with open('./Code files/bookset.json', 'r') as json_file:
             read_books = json.load(json_file)
             for x in read_books:
                 self.books.append(
