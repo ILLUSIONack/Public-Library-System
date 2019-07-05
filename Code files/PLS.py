@@ -182,9 +182,9 @@ class Catalog(Book):
     """
     Prints out the book that are available given by a title, ISBN or author name.
     """
-    def checkAvailibility(self, input):
+    def checkAvailability(self, input):
         books_found = []
-        print("Results for (" + input + ")...")
+        print("Results for availability (" + input + ")...")
         for book in self.bookItems:
             if book.isSearchedBook(input):
                 books_found.append(book)
@@ -277,9 +277,11 @@ if __name__ == "__main__":
     customer = library.loanAdministration.customers[3]
     print("We have declared a variable for valentin")
     print("Valentin is interested in searching up the book 'The Book Of Job'")
-    library.catalog.checkAvailibility("The Book Of Job")
+    library.catalog.searchBook("The Book Of Job")
+    print("Valentin would now like to check the availibility of 'The Book Of Job'")
+    library.catalog.checkAvailability("The Book Of Job")
     print("Valentin also is looking for another book, but he only knows it's ISBN which is '2'")
-    library.catalog.checkAvailibility("2")
+    library.catalog.checkAvailability("2")
     print("Valentin is now done with searching and would like to borrow the books")
     print("He starts with borrowing the book 'The Book Of Job'")
     the_book_of_job = library.catalog.bookItems[8]
@@ -287,32 +289,32 @@ if __name__ == "__main__":
     print("Let's first take a look at the books that Valentin has borrowed thus far")
     customer.getBorrowedBooks()
     print("Let's now take a look at our book items status and search again for 'The Book Of Job'")
-    library.catalog.checkAvailibility("The Book Of Job")
+    library.catalog.checkAvailability("The Book Of Job")
     print("As we can see there is only one more book item left for the book 'The Book Of Job'")
     print("Valentin is still interested in borrowing the 'Things Fall Apart' book")
     things_fall_apart = library.catalog.bookItems[1]
     library.loanAdministration.borrowBook(customer, things_fall_apart)
     print("Now let's do the same thing for this book and search it up 'Things Fall Apart'")
-    library.catalog.checkAvailibility("Things Fall Apart")
+    library.catalog.checkAvailability("Things Fall Apart")
     print("The loan administration is stocking up again and it's adding a new book")
     print("Let's first try and search up the book item that the loan administration is going to be adding soon... with the title", 'The End Of Times')
-    library.catalog.checkAvailibility("The End Of Times")
+    library.catalog.checkAvailability("The End Of Times")
     print("As you can see no result, the loan administration will now be adding the book")
     library.catalog.addBook("Hamza Fethi", "Netherlands", "images/times-end.jpg", "Dutch", "https://en.wikipedia.org/wiki/Fairy_Tales_Told_for_Children._First_Collection.\n", 433, "The End Of Times", 1750)
     print("Now that we have added the book we can add a book item for this book")
     library.catalog.addBookItem("Hamza Fethi", "Netherlands", "images/times-end.jpg", "Dutch", "https://en.wikipedia.org/wiki/Fairy_Tales_Told_for_Children._First_Collection.\n", 433, "The End Of Times", 1750)
     print("The loan administration has succesfully added a new book and a book item", 'The End Of Times', "Lets try and search it up")
-    library.catalog.checkAvailibility("The End Of Times")
+    library.catalog.checkAvailability("The End Of Times")
     print("Lets get back to valentin, he brought with him a friend who would like to register as a new member. His name is 'Gary Veulen'")
     new_customer = Customer("male", "Dutch", "Gary", "Veulen", "Palisanderstraat 43", "3031 CG", "Rotterdam", "garyveulen1998@gmail.com", "GaryVeulen", "06-84211309")
     library.loanAdministration.addCustomer(new_customer)
     print("The loan administration successfully made 'Gary Veulen' a new customer")
     print("Gary is also interested in borrowing the book 'The Book Of Job'")
-    library.catalog.checkAvailibility("The Book Of Job")
+    library.catalog.checkAvailability("The Book Of Job")
     the_book_of_job_second = library.catalog.bookItems[7]
     library.loanAdministration.borrowBook(new_customer, the_book_of_job_second)
     print("Gary is also looking to borrow the same book for his little sister")
-    library.catalog.checkAvailibility("The Book Of Job")
+    library.catalog.checkAvailability("The Book Of Job")
     print("Gary is not able to borrow the book as its not available anymore!")
     print("The library will be closing soon so it will be backed up before closing")
     library.makeBackup("backup_first")
